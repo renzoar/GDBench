@@ -42,7 +42,7 @@ and optionally a creation date.
 </p>
 
 <figure>
-<img src="./Graph Data Benchmark (GDBench)_files/data_schema.jpg" border="1">
+<img src="./data_schema.jpg" border="1">
 <figcaption>Figure 1. Data model of GDBench</figcaption>
 </figure>
 
