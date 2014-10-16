@@ -266,13 +266,13 @@ ExecutionOrder=s<br/>
 Repetitions=3<br/>
 TestData=r<br/>
 <br/>
---- Parameters ---</br>
-DataLoading=true|false : Run data loading test.</br>
-QueryTest=true|false   : Run query test for all queries.</br>
-Query=#                : Run query test for query type # (1 <= # <= 13). If # = 0 then run query test for all queries.</br>
-Instances=#            : Defines the number # of instances for query to be executed.</br>
-ExecutionOrder=s|r     : Defines the query execution order (s = sequential, r = random).</br>
-Repetitions=#          : Defines the number # of times that each instance query will be executed.</br>
+--- Parameters ---<br/>
+DataLoading=true|false : Run data loading test.<br/>
+QueryTest=true|false   : Run query test for all queries.<br/>
+Query=#                : Run query test for query type # (1 <= # <= 13). If # = 0 then run query test for all queries.<br/>
+Instances=#            : Defines the number # of instances for query to be executed.<br/>
+ExecutionOrder=s|r     : Defines the query execution order (s = sequential, r = random).<br/>
+Repetitions=#          : Defines the number # of times that each instance query will be executed.<br/>
 TestData=r|i|m          : Defines the method for test data selection (r = random, i = interval, m = media-based)
 </p>
 
