@@ -1,6 +1,5 @@
 <html>
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <title>Graph Data Benchmark (GDBench)</title>
 </head>
 
 <body>
@@ -76,12 +75,12 @@ optimized, by the database systems.</p>
 </tr>
 <tr>
 <td>2</td>
-<td>People that likes a given Web page W</td>
+<td>The name of people that likes a given Web page W</td>
 <td>Adjacency</td>
 </tr>
 <tr>
 <td>3</td>
-<td>The Web pages that person P likes</td>
+<td>The URL of Web pages that person P likes</td>
 <td>Adjacency</td>
 </tr>
 <tr>
@@ -91,17 +90,17 @@ optimized, by the database systems.</p>
 </tr>
 <tr>
 <td>5</td>
-<td>The friends of the friends of a given person P</td>
+<td>The name of friends of the friends of a given person P</td>
 <td>Reachability</td>
 </tr>
 <tr>
 <td>6</td>
-<td>The Web pages liked by the friends of a given person P</td>
+<td>The URL of Web pages liked by the friends of a given person P</td>
 <td>Reachability</td>
 </tr>
 <tr>
 <td>7</td>
-<td>Get people that likes a Web page which a person P likes</td>
+<td>Get the name of people that likes a Web page which a person P likes</td>
 <td>Reachability</td>
 </tr>
 <tr>
@@ -116,22 +115,27 @@ optimized, by the database systems.</p>
 </tr>
 <tr>
 <td>10</td>
-<td>Get the common friends between people P1 and P2</td>
+<td>Get the name of common friends between people P1 and P2</td>
 <td>Pattern matching</td>
 </tr>
 <tr>
 <td>11</td>
-<td>Get the common Web pages that people P1 and P2 like</td>
+<td>Get the URL of common Web pages that people P1 and P2 like</td>
 <td>Pattern matching</td>
 </tr>
 <tr>
 <td>12</td>
-<td>Get the number of friends of a person</td>
+<td>Get the name and the number of friends of a person</td>
 <td>Summarization</td>
 </tr>
-
+<tr>
+<td>13</td>
+<td>The friends of the friends of the friends a given person P</td>
+<td>Reachability</td>
+</tr>
 </tbody>
 </table>
+
 
 
 <p><b>Performance metrics.</b></p>
@@ -163,21 +167,23 @@ to populate the database cache system.</li>
 </ul>
 
 
-<p><b>Graph data and test data generation.</b></p>
+
+<h2>GDGenerator: A social network data generator</h2>
+
 <p>
-We have developed a java application which allows the generation of syntetic graph data 
-following the social network structure defined above.
-First we developed a general-purpose graph data generator based on the 
-Recursive Matrix (R-Mat) model, but optimized to generate large graphs in a streamed fashion 
-(i.e., reducing memory restrictions). 
+GDBench includes <a href="https://github.com/renzoar/GDBench/tree/master/GDGenerator">GDGenerator</a>, a java application which allows the generation of synthetic graph data following the social network structure defined above.
 </p>
+
+<p>The implementation of GDGenerator is based on a general-purpose graph data generator (<a href="https://github.com/renzoar/GraphGenerator">GraphGenerator</a>) which is based on the Recursive Matrix (R-Mat) model, but optimized to generate large graphs in a streamed fashion (i.e., reducing memory restrictions). GraphGenerator allows to create directed/undirected graphs following normal/powerlaw distributions. 
+</p>
+
 <p>
 To produce synthetic social-network data we take as reference the information published by 
 current social networks applications, in particular Facebook, 
 The number of users in Facebook is significantly larger than the number of webpages.
-To simulate this, we set 80% of the nodes as persons and 20% as webpages. 
+By default, we set 50% of the nodes as persons and 50% as webpages. 
 The identifier of a person node (i.e., the attribute pid) is an integer value in 
-the range [1, N × 0.8], where N is the number of nodes in the graph. 
+the range [1, N × 0.5], where N is the number of nodes in the graph. 
 The names of persons and locations are selected randomly from dictionaries including
 5494 first names, 88799 last names, and 656 locations. 
 Hence, the probability of having duplicated pairs of these two 
@@ -190,88 +196,85 @@ is an integer in the range [(N × 0.8) + 1, N ].
 The attribute URL follows the pattern http://www.site.org/webpageID.html 
 where ID is the wpid of the webpage. 
 The probability of including a random creation date for a webpage is 0.6.
+
+<p>
 Resembling the data generator of the benchmark for the Facebook social graph 
-(<a href="https://www.facebook.com/notes/facebook-engineering/linkbench-a-database-benchmark-for-the-social-graph/10151391496443920">LinkBench</a>), 
-we use the general-purpose method for graph generation to obtain power-law distributions 
+(<a href="https://www.facebook.com/notes/facebook-engineering/linkbench-a-database-benchmark-for-the-social-graph/10151391496443920">LinkBench</a>), GDGenerator allows to obtain power-law distributions 
 for the edges corresponding to relationships friend and like.
 </p>
 
-<p><b>Social network data generator</b></p>
-
 <p>
-The data generator is available as the java application <a href="http://campuscurico.utalca.cl/~rangles/gdbench/GDGenerator.zip">GDGenerator</a>.
-The output of the data generator is a data file and a test data file. 
+The current version of GDGenerator allows to specify three parameters: 
 </p>
+<ul>
+<li>the number of nodes in the graph (by default, 50% of the nodes are people and 50% webpages);</li> 
+<li>the format of the output data file (gd = graph data -default-, gml = Graphml and n3 = Notation3-RDF);</li>
+<li>the statistical distribution of edges friend/like (1 = powerlaw/powerlaw, 2 = powerlaw/normal, 3 = normal/powerlaw, 4 = normal/normal).</li> 
+</ul>
 
 <p>
-The data file, named <b>sndata.*</b>, contains the graph data in an specific format. 
+The output of the data generator is a file named <b>sndata.*</b> which contains the graph data in an specific format. 
 The data format used by default is a non-standard compressed format used called graphdata (*.gd).
 </p>
 
-<p>
-The test data file, named <b>testdata.xml</b>, is an XML file 
-containing test data, that is data to be used in the creation of query instances. 
-For example, if the benchmark issues 10,000 instances of Q1, then the data file contains a list of 10,000 names.
-The test data is grouped as follows: 
-IDs of people (used for queries Q3, Q4, Q5, Q6, Q7, Q12); 
-names of people (used for query Q1); 
-IDs of webpages (used for query Q2); 
-pairs of IDs <person,person> such that these two people are connected
-by a “friend” relationship (used for query Q10); 
-pairs of IDs <person,webpage> such that there is a relationship
-“like” between the person and the webpage; 
-and 
-pairs of IDs <person,person> such that there is a path between 
-them (used for queries Q8 and Q9).
-The selection of test data runs in parallel to the graph data generation process. 
-Hence, the data is generated as a stream of query instances.
-</person,person></person,webpage></person,person></p>
 
-<p>
-The current version of the data generator allows to specify three parameters: 
+
+
+<h2>The GDBench Test Driver</h2>
+
+
+<p>The GDBench test driver is available as a java library <b>GDBench.jar</b> which allows the execution of data loading and query tests.
+This is obtained by compiling the code available in the <a href="https://github.com/renzoar/GDBench/tree/master/GDBench">GDBench directory</a>.
 </p>
-<ul>
-<li>the number of nodes in the graph (by default, 80% of the nodes are people and 20% webpages);</li> 
-<li>the format of the output data file (gd = graph data -default-, gml = Graphml and n3 = Notation3-RDF);</li>
-<li>the number of samples in the test data file (by default 100 samples for each group of test data).</li> 
-</ul>
 
-
-<p><b>The GDBenchmark Java Library.</b></p>
-<p>The benchmark is available as the java library <a href="http://campuscurico.utalca.cl/~rangles/gdbench/GDBenchmark.jar">GDBenchmark.jar</a>. 
-This library allows the execution of data loading and query tests.
-The source code of the java library is available <a href="http://campuscurico.utalca.cl/~rangles/gdbench/GDBenchmark-src.zip">here</a></p>
-
-<p> The main class of GDBenchmark is <b>TestDriver.java</b>. 
-This is an abstract class that defines an interface to operate with a database system.
-It includes methods for 
-database definition (createDB, openDB, closeDB), 
+<p>
+The main class of the library, <b>TestDriver.java</b>, is an abstract class that defines an interface to operate with a database system. It includes methods for database definition (createDB, openDB, closeDB), 
 data loading (openTransaction, closeTransaction, insertPerson, insertWebpage, insertFriend, insertLike) 
-and 
-query execution (Q1, ..., Q12). 
+and query execution (Q1, ..., Q13). 
+Next we describe the steps to use the GDBench.jar library.   
 </p>
-
-
 
 
 
 <h2>How to evaluate a database system with GDBench</h2>
 
-<p>The procedure to evaluate the performance of a database system, 
-by using the benchmark described above, is defined by the following steps.</p>
+
+<p>The procedure to evaluate the performance of a database system, by using the benchmark described above, is defined by the following steps.</p>
 
 
 <p><b>Data generation.</b></p>
 <p>
-The first step is the generation of the data by using the graph data generator <a href="http://campuscurico.utalca.cl/~rangles/gdbench/GDGenerator.zip">GDGenerator</a>.
-It results in the data file sndata.gd and the test data file testdata.xml. 
+The first step is the generation of the data by using the graph data generator <a href="https://github.com/renzoar/GDBench/tree/master/GDGenerator">GDGenerator</a> to created the data file <b>sndata.gd</b>. 
 
 </p><p><b>Test driver implementation.</b></p>
 <p>
-It consists in the development of a java class that implements the class TestDriver 
-with the code corresponding to the target database system.
-We provide the class <a href="http://campuscurico.utalca.cl/~rangles/gdbench/MyTestDriver.java">MyTestDriver.java</a> as an example of such class.
+It consists in the development of a java class that implements the abstract class <b>TestDriver.java</b> with the code corresponding to the target database system.
+<a href="https://github.com/renzoar/GDBench/tree/master/MyGDBench">MyGDBench</a> is a java project that can be used as a starting point for implemeting your own test driver.
 </p>
+
+<p>
+The execution of the benchmark is defined by a configuration file called <b>gdbench.conf</b>. 
+If this file does not exists, it is created with the following content:
+
+</p>
+DataLoading=true</br>
+QueryTest=true</br>
+Query=0</br>
+Instances=100</br>
+ExecutionOrder=s</br>
+Repetitions=3</br>
+TestData=r</br>
+
+--- Parameters ---</br>
+DataLoading=true|false : Run data loading test.</br>
+QueryTest=true|false   : Run query test for all queries.</br>
+Query=#                : Run query test for query type # (1 <= # <= 13). If # = 0 then run query test for all queries.</br>
+Instances=#            : Defines the number # of instances for query to be executed.</br>
+ExecutionOrder=s|r     : Defines the query execution order (s = sequential, r = random).</br>
+Repetitions=#          : Defines the number # of times that each instance query will be executed.</br>
+TestData=r|i|m          : Defines the method for test data selection (r = random, i = interval, m = media-based)
+</p>
+
 
 
 <p><b>Data loading test.</b></p> 
@@ -282,42 +285,24 @@ We provide the class <a href="http://campuscurico.utalca.cl/~rangles/gdbench/MyT
 Transactional data loading is supported by calling the method runDataLoading() 
 provided by the class MyTestDriver (and implemented in the class TestDriver) .
 The application reads the data file sndata.gd and use transactions to insert the 
-data in the target database, according to the data loading methods defined in the 
+data in the target database according to the data loading methods defined in the 
 class MyTestDriver (recall that these methods must be implemented by the user).</p>
 
 <p>
 Bulk data loading depends on the support of a database system to read specific data formats. 
 For example, RDF databases are able to read N3 and RDF-XML files. 
 Unfortunately, current graph database systems define different and non-standard data formats, 
-therefore different data loaders must be developed (GraphML is not useful here). 
-The benchmark includes a tool (<a href="http://campuscurico.utalca.cl/~rangles/gdbench/GDExporter.jar">GDExporter</a>) to convert a compressed data file into 
-different data formats. 
-In the context of this work, we have implemented the conversion to a PostgreSQL dump 
-encoding SQL instructions, and we plan to extend this tool to support other data formats.</p>
+therefore different data loaders must be developed. 
+</p>
 
 <p><b>Query execution test.</b></p> 
-<p>The execution of queries requires of the GDBenchmark Java library 
-and the test data file (testdata.xml) created in the data generation step. 
-The test consider the execution of 100 instances (default) for each query type, 
-however this is a parameter that can be changed by the user. 
-When the number of samples available in the test data file is not enough to 
-construct all the query instances, then some instances can be repeated. 
-The user is able to run the test for a specific query type, or to run the complete query mix. 
-Additionally, it is possible to select between a sequential or random order of query instances.</p>
-
-<p>The class MyTestDriver provides the following methods to execute the query test:</p>
-<ul>
-<li>runQueryTest() <br> 
-It allows the execution of 100 instances (default) for each query type. 
-</li>
-<li>runQueryTest(int instances_for_query, String querymix_type) <br> 
-It allows to specify the number of instances for query type and
-the type of query mix (either sequential or random).</li>
-<li>runQueryTestByQuery(int query_number): <br> 
-it allows to restrict the execution to instances of a query type. </li>
-<li>runQueryTestByQuery(int query_number, int instances_for_query, String querymix_type)</li>
-</ul>
-
+The query execution test (which must be executed after the data is stored in the database) allows to run a collection of queries called a "query mix".
+A query mix is constructed by creating a given number of instances for each query.   
+By default, the benchmark creates 100 instances but it can be defined by using the parameter "Instances" in the configuration file.
+The test data used to create the query instances can be generated by one of three methods (random, interval and media-based).    
+The parameter "ExecutionOrder" allows to select between a sequential or random order of query instances in the query mix.
+Additionally, the user is able to run the test for a specific query type or to run the complete query mix.
+</p>
 
 <p>The execution of the query test consider two steps: 
 the first step is oriented to prepare the database system (warm-up); 
@@ -335,36 +320,25 @@ In both cases the same query mix is executed.</p>
 <p><b>Benchmarking results.</b></p> 
 
 <p>
-The benchmark provides reports for the transactional loading test and the query execution 
+The benchmark provides reports, in HTML and CSV formats, for the transactional loading test and the query execution 
 test. 
 The data loading report includes information about the data loaded 
 (e.g., number of nodes and edges) and the total loading time. 
 The query execution report contains general and detailed information about the queries 
 executed. 
 A first part of the report presents, for each query type, the number of 
-instances executed plus the total, maximum, minimal and average execution time. 
+instances executed plus the total, maximum, minimal, average, variance and standard deviation execution times. 
 A second part shows the list of query instances executed during the test, 
 including the query type, the input data, the output data, 
 and the execution time for query instance.
 </p>
 
 
-<p><b>Implementation samples</b></p>
+<p><b>Implementation samples and experiments</b></p>
 
-<p>An example of Netbeans project that uses the GDBenchmark java library is available <a href="http://campuscurico.utalca.cl/~rangles/gdbench/GDBenchTest.zip">here</a>.</p>
-
-<p>We provide the source code of java projects implementing test drivers for  
-<a href="http://campuscurico.utalca.cl/~rangles/gdbench/GDBenchDex.zip">Dex</a> and 
-<a href="http://campuscurico.utalca.cl/~rangles/gdbench/GDBenchNeo4j.zip">Neo4j</a>. 
+<p>The source code of java projects implementing test drivers for different database systems (including Dex and Neo4j) are available <a href="http://ing.utalca.cl/~rangles/gdbench/">here</a>.
+Experimental results are also available.
 </p>
-
-
-
-<h2>Experiments</h2>
-
-<ul>
-<li>2013/05/17: <a href="http://campuscurico.utalca.cl/~rangles/gdbench/test_2013-05-17/index.html">Results</a> from running GDBench against Dex, Neo4j, RDF-3X, Virtuoso and PostgreSQL.</li>
-</ul>
 
 
 <h2>Acknowledgements</h2>
@@ -373,6 +347,7 @@ and the execution time for query instance.
 
 <p><b>Collaborators:</b></p> 
 <ul>
+<li>Roberto García (DCC, Univ. de Talca): Design and development of the current version of GDBench.</li>
 <li>Sebastián Arancibia (DCC, Univ. de Talca): Design and development of initial versions the data generator.</li>
 <li>Sergio Silva (DCC, Univ. de Talca): Implementations of test drivers for graph database systems and RDF Stores.</li>
 <li>Josep-Lluis Larriba-Pey (<a href="http://www.dama.upc.edu/">DAMA-UPC</a>): Design of the bechmark</li>
@@ -388,12 +363,7 @@ and the execution time for query instance.
 </ul>
 
 
-<p>Last update: June 4, 2013</p> 
-
-
-
-
-
+<p>Last update: Oct 16, 2014</p> 
 
 
 </body></html>
