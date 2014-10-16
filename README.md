@@ -1,16 +1,6 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- 
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <title>Graph Data Benchmark (GDBench)</title>
-<style type="text/css">
-body {background-color:white;}
-text {color:black;}
-p {color:black;font-family:garamond;}
-li {color:black;font-family:garamond;}
-link {color:blue;}
-h1 {color:#000080;}
-h2 {color:#000080;}
-h3 {color:#000080;}
-</style>
 </head>
 
 <body>
