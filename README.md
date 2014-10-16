@@ -255,16 +255,17 @@ It consists in the development of a java class that implements the abstract clas
 <p>
 The execution of the benchmark is defined by a configuration file called <b>gdbench.conf</b>. 
 If this file does not exists, it is created with the following content:
-
 </p>
-DataLoading=true</br>
-QueryTest=true</br>
-Query=0</br>
-Instances=100</br>
-ExecutionOrder=s</br>
-Repetitions=3</br>
-TestData=r</br>
 
+<p>
+DataLoading=true<br/>
+QueryTest=true<br/>
+Query=0<br/>
+Instances=100<br/>
+ExecutionOrder=s<br/>
+Repetitions=3<br/>
+TestData=r<br/>
+<br/>
 --- Parameters ---</br>
 DataLoading=true|false : Run data loading test.</br>
 QueryTest=true|false   : Run query test for all queries.</br>
