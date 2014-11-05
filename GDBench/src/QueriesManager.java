@@ -152,8 +152,8 @@ public class QueriesManager {
             tdi = new TestDataInstance("friend");
             if (dataType==this.interval)
             {
-                long node= (persons/query_number)*i;
-                long value = node +((persons-node)/4);
+                long node= ((persons-1)/query_number)*i;
+                long value = node + (((persons-1) - node)/4);
                 String value1= String.valueOf(node);
                 String value2= String.valueOf(value);
                 
@@ -193,7 +193,7 @@ public class QueriesManager {
             tdi = new TestDataInstance("commonlike");
             if (dataType==this.interval)
             {
-                long node= (persons/query_number)*i;
+                long node= ((persons-1)/query_number)*i;
                 long value = node +1;
                 String value1= String.valueOf(node);
                 String value2= String.valueOf(value);
@@ -430,7 +430,7 @@ public class QueriesManager {
         this.copyInstances(instancesQ12, instances_for_query);
         this.copyInstances(instancesQ13, instances_for_query);
         if(type.compareTo("r")==0){
-            Collections.shuffle(querymix);
+            Collections.shuffle(querymix,rand);
         }
         return querymix;
     }
@@ -497,7 +497,7 @@ public class QueriesManager {
         }
         
         if(type.compareTo("r")==0){
-            Collections.shuffle(querymix);
+            Collections.shuffle(querymix,rand);
         }
         return querymix;
     }

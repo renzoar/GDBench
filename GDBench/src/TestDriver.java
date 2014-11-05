@@ -299,9 +299,10 @@ public abstract class TestDriver {
     }
 
     private void runQueryMix(ArrayList<QueryInstance> arr, boolean warmup) {
+        Random rand = new Random(80808080);
         QueryInstance instance;
         ArrayList<QueryInstance> arr2 =new ArrayList<QueryInstance>(arr);
-        Collections.shuffle(arr2);
+        Collections.shuffle(arr2,rand);
         Iterator<QueryInstance> it = arr2.iterator();
         String newline;
         Integer counter = 0;
