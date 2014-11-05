@@ -38,17 +38,17 @@ public class MyTestDriver extends TestDriver {
 
     @Override
     public long getNumberOfNodes() {
-        return 1;
+        return 100;
     }
 
     @Override
     public long getNumberOfEdges() {
-        return 1;
+        return 100;
     }
 
     @Override
     public long getDBsize() {
-        return 1;
+        return 100;
     }
 
     @Override
@@ -137,12 +137,12 @@ public class MyTestDriver extends TestDriver {
 
     @Override
     long getNumberOfWebPages() {
-        return 0;
+        return 100;
     }
 
     @Override
     long getNumberOfPersons() {
-        return 0;
+        return 100;
     }
 
     
