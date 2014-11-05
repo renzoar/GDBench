@@ -21,14 +21,20 @@ public class Person {
     
     public Person(long ID, Data data) {
         this.id = ID;
+        rand = new Random(ID);
         this.name = data.getRandomName();
 
-        if ((int) (rand.nextDouble() * 100) <= 60) {
-            this.age = String.valueOf((int) (rand.nextDouble() * 70) + 10);
+        rand.nextBoolean();
+        
+        if(rand.nextBoolean()){
+            Double a = Math.ceil(rand.nextDouble() * 100);
+            Long v = a.longValue();
+            this.age = v.toString();
         }
-
-        if ((int) (rand.nextDouble() * 100) <= 30) {
+        
+        if(rand.nextBoolean()){
             this.location = data.getRandomLocation();
         }
+        
     }
 }

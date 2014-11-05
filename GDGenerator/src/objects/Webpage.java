@@ -14,13 +14,16 @@ import java.util.Random;
 public class Webpage {
 
     public long id;
+    public String url;
     public String creation = "?";
     Random rand = new Random(9999999);
 
     public Webpage(long ID, Data data) {
+        rand = new Random(ID);
         this.id = ID;
-
-        if ((int) (rand.nextDouble() * 100) <= 60) {
+        this.url = "http://www.site.org/webpage" + ID + ".html";
+        rand.nextBoolean();
+        if (rand.nextBoolean()) {
             this.creation = data.getRandomDate();
         }
 

@@ -130,8 +130,7 @@ public class Generator {
             for (long i = 1; i <= webpages_number; i++) {
                 wpid = people_number + i;
                 webpage = new Webpage(wpid, data);
-                wp_url = "http://www.site.org/webpage" + wpid + ".html";
-                datawriter.writeWebpage(String.valueOf(wpid), wp_url, webpage.creation);
+                datawriter.writeWebpage(String.valueOf(wpid), webpage.url, webpage.creation);
                 nodes_counter++;
                 webpages_counter++;
                 this.printCounter(webpages_counter, webpages_number);

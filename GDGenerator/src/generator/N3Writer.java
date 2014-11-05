@@ -64,7 +64,7 @@ public class N3Writer extends DataWriter {
         line = wp_uri + " vocw:url \"" + url + "\" .";
         this.writeLine(line);
 
-        if (creation.compareTo("?") == 0) {
+        if (creation.compareTo("?") != 0) {
             line = wp_uri + " vocw:creation \"" + creation + "\" .";
             this.writeLine(line);
         }
