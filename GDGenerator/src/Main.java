@@ -21,13 +21,13 @@ public class Main {
         System.out.println("A webpage node has attributes id (long), url (string) and creation (date,optional).");
         System.out.println("Edges are used to represent the relationships friend (undirected edge between people) and like (directed edge between a person and a webpage)");
         System.out.println("The user is able to select between normal and powerlaw distributions for edges friend and like.");
-        System.out.println("The application creates a file sndata.* in any of the following formats: plain format (*.gd), GrapML (*.gml) and Notation3-RDF (*.n3)");
+        System.out.println("The generator supports the following output formats: plain format (*.gd), csv, GrapML (*.gml) and Notation3-RDF (*.n3)");
         System.out.println();
         System.out.println("Mandatory parameters:");
         System.out.println("-n  Number of nodes (people + webpage)");
         System.out.println("Optional parameters:");
         System.out.println("-p  Integer indicating the percentage of nodes people (the rest will be web pages)(default 50%)");
-        System.out.println("-f  Data format of the data file: gd = graph data (default), gml = GraphML, n3 = Notation3-RDF");
+        System.out.println("-f  Data format of the data file: gd = graph data (default), csv (comma-separated values),  gml = GraphML, n3 = Notation3-RDF");
         System.out.println("-d  Statistical distibutions for edges friend/like: 1 = powerlaw/powerlaw (default), 2 = powerlaw/normal, 3 = normal/powerlaw, 4 = normal/normal)");
         System.out.println();
     }
@@ -80,7 +80,9 @@ public class Main {
         int pages = (int) (nodes * (100 - p) / 100);
 
         DataWriter datawriter;
-        if (format.compareTo("gml") == 0) {
+        if (format.compareTo("csv") == 0) {
+            datawriter = new CSVWriter();
+        } else if (format.compareTo("gml") == 0) {
             datawriter = new GraphmlWriter();
         } else if (format.compareTo("n3") == 0) {
             datawriter = new N3Writer();
